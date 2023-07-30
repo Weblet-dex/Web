@@ -7,6 +7,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
   <style>
 
 
@@ -106,6 +108,17 @@
       border: 1px solid #ff6700;
       margin-left: 0.5vw;
       box-shadow: 0px 0px 8px 0px #ff6700;
+    }
+    #tv_chart_container {
+      position: absolute;
+      z-index: 3;/**/
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      filter: contrast(1.5);
+    }
+    .price-line {
+      position: absolute;
     }
 
     .release-item,
@@ -381,8 +394,9 @@
     <div id="mainPriceChart">
       <div class="price-chart">
         <div class="price-title titleFont">Price Comparison Chart</div>
-        <div class="price-line-container" style="position: relative; height:56vh; width:100%">
-            <canvas class="price-line" width="400" height="200"></canvas>
+        <div class="price-line-container" style="position: relative; height:59vh; width:100%; overflow: hidden;">
+            <!--<canvas class="price-line" width="400" height="200"></canvas>  -->
+            <div id="tv_chart_container" class="price-line"></div>
         </div>
       </div>
     </div>
@@ -517,7 +531,9 @@
           maintainAspectRatio: false,
           plugins: {
               datalabels: {
-                color: 'black', // Label text color
+                color: 'white', // Label text color
+                //anchor:'end',
+                display: false,
                 font: {
                   weight: 'bold',
                   size: window.innerWidth * .012,
@@ -557,7 +573,7 @@
         data: {
           labels: ['R47 Spot Price','Silver Price','Redemption Price'],
           datasets: [{
-            label: 'Price',
+            label: 'Price Per Ounce',
             data: [35, 39, 47],
             backgroundColor: ['#ff6384', '#C0C0C0', '#cc65fe'],
             barPercentage: 1, // Remove gap between bars
@@ -582,10 +598,21 @@
                   display: false
               },
               datalabels: {
-                color: 'black', // Label text color
+                color: 'white', // Label text color
+                anchor:'start',
+                align:'top',
+                offset: -4,//window.innerWidth * 0.003,
+                backgroundColor: '#000000',
+                padding: {
+                  left: window.innerHeight * 0.018,
+                  right: window.innerHeight * 0.018,
+                  top: window.innerHeight * 0.007,
+                  bottom: window.innerHeight * 0.0099
+                },
                 font: {
-                  weight: 'bold',
-                  size: 14,
+                  family:'ds-digitalnormal',
+                  //weight: 'bold',
+                  size: window.innerHeight * 0.022,
                 },
                 formatter: (value, context) => { // Customize label text (optional)
                   return '$' + value;
@@ -596,7 +623,7 @@
       });
 
       // Create the line chart using Chart.js
-      const mainPriceLine = new Chart(document.querySelector('.price-line'), {
+      /*const mainPriceLine = new Chart(document.querySelector('.price-line'), {
         type: 'line',
         data: lineChartData,
         options: {
@@ -611,6 +638,10 @@
                 min: 0,
                 max: 100,
                 stepSize: 10,
+                // Include a dollar sign in the ticks
+                callback: function(value, index, ticks) {
+                    return '$' + value;
+                }
               },
               //display: false,
               position: 'right'
@@ -629,7 +660,59 @@
               }
           }
         }
+      });*/
+
+      // trading view test
+      tvWidget = new TradingView.widget({
+        // Specify the container element
+        container_id: "tv_chart_container",
+
+        // Set the symbol for silver (XAGUSD is the TradingView symbol for silver)
+        symbol: "PYTH:XAGUSD",
+        compare_symbols: [
+            { symbol: 'PYTH:LTCUSD', title: '' },
+            { symbol: 'PYTH:ATOMUSD', title: '' },
+        ],
+        //comparison: ['PYTH:LTCUSD','PYTH:ATOMUSD'],
+
+        // Choose the desired interval (e.g., 'D' for daily)
+        interval: "D",
+
+        // Set the timezone (optional)
+        timezone: "Etc/UTC",
+
+        // Choose the theme (optional)
+        theme: "dark",
+
+        // Show the TradingView toolbar (optional)
+        hide_top_toolbar: false,
+
+        // Display the TradingView logo (optional)
+        show_logo: true,
+
+        // Show the legend (optional)
+        hide_legend: false,
+
+        // Show the interval selector (optional)
+        hide_side_toolbar: true,
+
+        // Show the 'powered by TradingView' link (optional)
+        allow_symbol_change: true,
+
+        autosize: true,
+
+        overrides: {
+          "paneProperties.background": "#C0C0C0",
+          "paneProperties.vertGridProperties.color": "#363c4e",
+          "paneProperties.horzGridProperties.color": "#363c4e",
+          "symbolWatermarkProperties.transparency": 90,
+          "scalesProperties.textColor" : "#AAA",
+          "mainSeriesProperties.candleStyle.wickUpColor": '#336854',
+          "mainSeriesProperties.candleStyle.wickDownColor": '#7f323f',
+         }
       });
+
+
 
       // Create the pie charts in the batch
       const batchPies = document.querySelectorAll('.batch-pie');
