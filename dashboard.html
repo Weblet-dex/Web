@@ -8,41 +8,43 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-<script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
+<script type="text/javascript" src="qrc:///Dex/Squeexe/Web/qwebchannel.js"></script>
 <script type="text/javascript">
     var backend; //defined below as a reference to our qml object.
+    var result;
     var butnTxt = "Buy";
     var butnTwoTxt = "Buy";
-    var result;
     window.onload = function(){ //gets called first..
+        console.log("html - window.onload() start - " + Date.now());
         new QWebChannel(qt.webChannelTransport, function(channel) {
-            backend = channel.objects.fzWebObj;
+            console.log("html - window.onload() before obj assign - " + Date.now());
+            backend = channel.objects.backend;
+            console.log("html - window.onload() after obj assign - " + Date.now());
             backend.setAgPrice.connect(function(curAgPrice) {
-            //document.getElementById("release-total").titleFont = curAgPrice;
-            butnTxt = "" + curAgPrice;
+                alert(curAgPrice);
+                document.getElementById("htSignal").innerHTML = curAgPrice;
             });
         });
     }
-        
+    
     function checkAgPrice(){				
         backend.getAgPrice(function(callback) { //should be async
             result = callback;
             alert(result);
-            //document.getElementById("release-total").titleFont = result;
-            butnTwoTxt = "" + result;
+            document.getElementById("htReturn").innerHTML = result;
         });
     }
 
     function onBatch(numbr){
-        backend.batchNumbr = (numbr + 2);
-        backend.focusBatch(numbr);
+        backend.batchNumbr = JSON.stringify((numbr + 2));
+        backend.focusBatch(JSON.stringify(numbr));
     }
 </script>
 <style>
 @font-face {
     font-family: 'dinregular';
     src: url('din-webfont.woff2') format('woff2'),
-            url('din-webfont.woff') format('woff');
+    url('din-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 
@@ -51,7 +53,7 @@
 @font-face {
     font-family: 'ds-digitalnormal';
     src: url('ds-digi-webfont.woff2') format('woff2'),
-            url('ds-digi-webfont.woff') format('woff');
+    url('ds-digi-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 
@@ -60,7 +62,7 @@
 @font-face {
     font-family: 'nebularegular';
     src: url('nebula-regular-webfont.woff2') format('woff2'),
-            url('nebula-regular-webfont.woff') format('woff');
+    url('nebula-regular-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -457,7 +459,7 @@ canvas {
         <div class="batch-content"><span class="batch-item-label">Sold:</span> <span class='mediumNumber batch-item-label-right'>1,400,000</span></div>
         <div class="batch-content"><span class="batch-item-label">Sale Price:</span> <span class='mediumNumber batch-item-label-right'>$0.02</span></div>
         <div class="batch-content"><span class="batch-item-label redeemLabel">Redeem At:</span> <span class='mediumNumber batch-item-label-right'>$80</span></div>
-        <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy">BUY</button></div>
+        <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy" onclick="checkAgPrice()">BUY</button></div>
     </div>
     </div>
     <div class="batch-item" id="batch3">
@@ -472,7 +474,7 @@ canvas {
         <div class="batch-content"><span class="batch-item-label">Sold:</span> <span class='mediumNumber batch-item-label-right'>900,000</span></div>
         <div class="batch-content"><span class="batch-item-label">Sale Price:</span> <span class='mediumNumber batch-item-label-right'>0.011c</span></div>
         <div class="batch-content"><span class="batch-item-label redeemLabel">Redeem At:</span> <span class='mediumNumber batch-item-label-right'>$100</span></div>
-        <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy">BUY</button></div>
+        <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy" onclick="onBatch(2)">BUY</button></div>
     </div>
     </div>
 </div>
@@ -483,9 +485,9 @@ canvas {
 const pieChartData = {
     labels: ['Release1: R47', 'Release2: R80', 'Release3: R100', 'Not Tokenised'],
     datasets: [{
-    data: [30, 25, 15, 30],
-    backgroundColor: ['#ff6384', '#36a2eb', '#8956ff', '#333333'],
-    borderWidth: 0,
+        data: [30, 25, 15, 30],
+        backgroundColor: ['#ff6384', '#36a2eb', '#8956ff', '#333333'],
+        borderWidth: 0,
     }]
 };
 

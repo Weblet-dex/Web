@@ -2,14 +2,17 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <script type="text/javascript" src="qrc:///Dex/Squeexe/Web/qwebchannel.js"></script>
+    <script type="text/javascript" src="qrc:///Dex/Squeexe/qwebchannel.js"></script>
     <script type="text/javascript">
         //here will be our QtObject from QML side
         var backend;
         var result;
         window.onload = function(){ //gets called first..
+            console.log("html - window.onload() start - " + Date.now());
             new QWebChannel(qt.webChannelTransport, function(channel) {
-                backend = channel.objects.fzWebObj;
+                console.log("html - window.onload() before obj assign - " + Date.now());
+                backend = channel.objects.backend;
+                console.log("html - window.onload() after obj assign - " + Date.now());
                 backend.setAgPrice.connect(function(curAgPrice) {
                     alert(curAgPrice);
                     document.getElementById("htSignal").innerHTML = curAgPrice;
@@ -40,7 +43,7 @@
     
     <p>changePropertyValue:</p>
     <button onclick="onBatch(2)">SendSignal</button>
-    
+
     <p>SignalFromQml:</p>
     <p id="htSignal"></p>		
 </body>
