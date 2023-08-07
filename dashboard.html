@@ -39,6 +39,10 @@
         backend.batchNumbr = JSON.stringify((numbr + 2));
         backend.focusBatch(JSON.stringify(numbr));
     }
+
+	function doThing(){
+    	alert('Hello World!');
+  	}
 </script>
 <style>
 @font-face {
@@ -281,6 +285,31 @@ canvas {
     color: white;
     letter-spacing: 1px;
 }
+.buttn {
+    padding:3px 3px;
+    width: 160px;
+    height: 32px;
+    right: 20%;
+    background-color: #000000;
+    border: 3px solid #C43402;
+    border-radius: 10px;
+    color: #ffffff;
+    letter-spacing: 1px;
+    font-family: 'nebularegular';
+    font-size: 24px;
+    text-align: -webkit-center;
+    /* max-height: 3.3vh; */
+    white-space: nowrap;
+}
+.buttn:hover {
+    background-color: #C9481B; /*#C9481B;*/
+    border: 3px solid #C9481B; /*#C9481B;*/
+}
+
+.buttn:active {
+    background-color: #C43402;
+    border: 3px solid #C43402;
+}
 .release-info-container {
     width: 100%;
     text-align: center;
@@ -444,7 +473,8 @@ canvas {
         <div class="batch-content"><span class="batch-item-label">Sold:</span> <span class='mediumNumber batch-item-label-right'>1,400,000</span></div>
         <div class="batch-content"><span class="batch-item-label">Sale Price:</span> <span class='mediumNumber batch-item-label-right'>$0.036</span></div>
         <div class="batch-content"><span class="batch-item-label redeemLabel">Redeem At:</span> <span class='mediumNumber batch-item-label-right'>$47</span></div>
-        <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy">BUY</button></div>
+        <!-- <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy">BUY</button></div> -->
+        <input class="buttn" value="Buy" onclick="doThing()" type="button" />
     </div>
     </div>
     <div class="batch-item" id="batch2">
@@ -459,7 +489,8 @@ canvas {
         <div class="batch-content"><span class="batch-item-label">Sold:</span> <span class='mediumNumber batch-item-label-right'>1,400,000</span></div>
         <div class="batch-content"><span class="batch-item-label">Sale Price:</span> <span class='mediumNumber batch-item-label-right'>$0.02</span></div>
         <div class="batch-content"><span class="batch-item-label redeemLabel">Redeem At:</span> <span class='mediumNumber batch-item-label-right'>$80</span></div>
-        <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy" onclick="checkAgPrice()">BUY</button></div>
+        <!-- <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy" onclick="checkAgPrice()">BUY</button></div> -->
+        <input class="buttn" value="Buy" onclick="doThing()" type="button" />
     </div>
     </div>
     <div class="batch-item" id="batch3">
@@ -474,7 +505,8 @@ canvas {
         <div class="batch-content"><span class="batch-item-label">Sold:</span> <span class='mediumNumber batch-item-label-right'>900,000</span></div>
         <div class="batch-content"><span class="batch-item-label">Sale Price:</span> <span class='mediumNumber batch-item-label-right'>0.011c</span></div>
         <div class="batch-content"><span class="batch-item-label redeemLabel">Redeem At:</span> <span class='mediumNumber batch-item-label-right'>$100</span></div>
-        <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy" onclick="onBatch(2)">BUY</button></div>
+        <!-- <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy" onclick="onBatch(2)">BUY</button></div> -->
+        <input class="buttn" value="Buy" onclick="doThing()" type="button" />
     </div>
     </div>
 </div>
