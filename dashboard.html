@@ -7,8 +7,43 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script type="text/javascript" src="qrc:///Dex/Squeexe/Web/qwebchannel.js"></script>
+  <script type="text/javascript">
+    var backend; //defined below as a reference to our qml object.
+    var result;
+    var butnTxt = "Buy";
+    var butnTwoTxt = "Buy";
+    window.onload = function(){ //gets called first..
+        console.log("html - window.onload() start - " + Date.now());
+        new QWebChannel(qt.webChannelTransport, function(channel) {
+            console.log("html - window.onload() before obj assign - " + Date.now());
+            backend = channel.objects.backend;
+            console.log("html - window.onload() after obj assign - " + Date.now());
+            backend.setAgPrice.connect(function(curAgPrice) {
+                alert(curAgPrice);
+                document.getElementById("htSignal").innerHTML = curAgPrice;
+            });
+        });
+    }
+    
+    function checkAgPrice(){				
+        backend.getAgPrice(function(callback) { //should be async
+            result = callback;
+            alert(result);
+            document.getElementById("htReturn").innerHTML = result;
+        });
+    }
+
+    function onBatch(numbr){
+        backend.batchNumbr = JSON.stringify((numbr + 2));
+        backend.focusBatch(JSON.stringify(numbr));
+    }
+
+	  function doThing(){
+    	alert('Hello World!');
+  	}
+  </script>
   <style>
 
 
@@ -253,6 +288,38 @@
       color: white;
       letter-spacing: 1px;
     }
+    .buyButton:hover {
+      background: #11ff0050;
+      border: 1px solid #00c22a;
+    }
+    .buyButton:active {
+      background: #10ff002b;
+      border: 1px solid #009921;
+    }
+    .buttn {
+      padding:3px 3px;
+      width: 160px;
+      height: 32px;
+      right: 20%;
+      background-color: #000000;
+      border: 3px solid #C43402;
+      border-radius: 10px;
+      color: #ffffff;
+      letter-spacing: 1px;
+      font-family: 'nebularegular';
+      font-size: 24px;
+      text-align: -webkit-center;
+      /* max-height: 3.3vh; */
+      white-space: nowrap;
+    }
+    .buttn:hover {
+      background-color: #C9481B; /*#C9481B;*/
+      border: 3px solid #C9481B; /*#C9481B;*/
+    }
+    .buttn:active {
+      background-color: #C43402;
+      border: 3px solid #C43402;
+    }
     .release-info-container {
       width: 100%;
       text-align: center;
@@ -416,7 +483,8 @@
           <div class="batch-content"><span class="batch-item-label">Sold:</span> <span class='mediumNumber batch-item-label-right'>1,400,000</span></div>
           <div class="batch-content"><span class="batch-item-label">Sale Price:</span> <span class='mediumNumber batch-item-label-right'>$0.036</span></div>
           <div class="batch-content"><span class="batch-item-label redeemLabel">Redeem At:</span> <span class='mediumNumber batch-item-label-right'>$47</span></div>
-          <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy">BUY</button></div>
+          <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy" onclick="doThing()">BUY</button></div>
+          <!-- <input class="buttn" value="Buy" onclick="doThing()" type="button" /> -->
         </div>
       </div>
       <div class="batch-item" id="batch2">
@@ -431,7 +499,8 @@
           <div class="batch-content"><span class="batch-item-label">Sold:</span> <span class='mediumNumber batch-item-label-right'>1,400,000</span></div>
           <div class="batch-content"><span class="batch-item-label">Sale Price:</span> <span class='mediumNumber batch-item-label-right'>$0.02</span></div>
           <div class="batch-content"><span class="batch-item-label redeemLabel">Redeem At:</span> <span class='mediumNumber batch-item-label-right'>$80</span></div>
-          <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy">BUY</button></div>
+          <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy" onclick="doThing()">BUY</button></div>
+          <!-- <input class="buttn" value="Buy" onclick="doThing()" type="button" /> -->
         </div>
       </div>
       <div class="batch-item" id="batch3">
@@ -446,7 +515,8 @@
           <div class="batch-content"><span class="batch-item-label">Sold:</span> <span class='mediumNumber batch-item-label-right'>900,000</span></div>
           <div class="batch-content"><span class="batch-item-label">Sale Price:</span> <span class='mediumNumber batch-item-label-right'>0.011c</span></div>
           <div class="batch-content"><span class="batch-item-label redeemLabel">Redeem At:</span> <span class='mediumNumber batch-item-label-right'>$100</span></div>
-          <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy">BUY</button></div>
+          <div class="batch-buy-button subTitleFont"><button class="buyButton" title="buy" onclick="doThing()">BUY</button></div>
+          <!-- <input class="buttn" value="Buy" onclick="doThing()" type="button" /> -->
         </div>
       </div>
     </div>
